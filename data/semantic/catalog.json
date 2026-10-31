@@ -1,0 +1,232 @@
+{
+  "version": "1.0.0",
+  "name": "semantic_customer_marketing",
+  "description": "Governed semantic layer for first-party customer marketing intelligence. The AI agent may only query these fields.",
+  "source": {
+    "product": "postgres.customers",
+    "warehouse": "ANALYTICS.CUSTOMER_360",
+    "semanticView": "SEMANTIC.CUSTOMER_MARKETING"
+  },
+  "limits": {
+    "maxRows": 500,
+    "defaultRows": 100,
+    "timeoutMs": 10000,
+    "maxFilters": 20
+  },
+  "operators": ["eq", "neq", "gt", "gte", "lt", "lte", "in", "between", "contains"],
+  "aggregations": ["count", "sum", "avg", "min", "max"],
+  "dimensions": [
+    {
+      "name": "customer_id",
+      "column": "id",
+      "type": "string",
+      "description": "Stable synthetic customer identifier."
+    },
+    {
+      "name": "first_name",
+      "column": "first_name",
+      "type": "string",
+      "description": "Given name (synthetic)."
+    },
+    {
+      "name": "last_name",
+      "column": "last_name",
+      "type": "string",
+      "description": "Family name (synthetic)."
+    },
+    {
+      "name": "email",
+      "column": "email",
+      "type": "string",
+      "description": "Synthetic email on the example.com domain."
+    },
+    {
+      "name": "age",
+      "column": "age",
+      "type": "number",
+      "description": "Customer age in years."
+    },
+    {
+      "name": "city",
+      "column": "city",
+      "type": "string",
+      "description": "City of residence."
+    },
+    {
+      "name": "state",
+      "column": "state",
+      "type": "string",
+      "description": "State or region code."
+    },
+    {
+      "name": "country",
+      "column": "country",
+      "type": "string",
+      "description": "ISO-like country code."
+    },
+    {
+      "name": "signup_date",
+      "column": "signup_date",
+      "type": "date",
+      "description": "Date the customer first registered."
+    },
+    {
+      "name": "acquisition_channel",
+      "column": "acquisition_channel",
+      "type": "string",
+      "description": "Marketing channel responsible for acquisition."
+    },
+    {
+      "name": "customer_status",
+      "column": "customer_status",
+      "type": "string",
+      "description": "Lifecycle status: active, at_risk, dormant, churned."
+    },
+    {
+      "name": "favorite_category",
+      "column": "favorite_category",
+      "type": "string",
+      "description": "Highest-revenue product category for the customer."
+    },
+    {
+      "name": "preferred_channel",
+      "column": "preferred_channel",
+      "type": "string",
+      "description": "Preferred engagement channel."
+    },
+    {
+      "name": "last_purchase_date",
+      "column": "last_purchase_date",
+      "type": "date",
+      "description": "Most recent order date."
+    },
+    {
+      "name": "last_campaign_engagement",
+      "column": "last_campaign_engagement",
+      "type": "date",
+      "description": "Most recent campaign open/click/conversion."
+    }
+  ],
+  "metrics": [
+    {
+      "name": "customer_count",
+      "type": "number",
+      "aggregation": "count",
+      "description": "Count of customers matching the query."
+    },
+    {
+      "name": "total_orders",
+      "column": "total_orders",
+      "type": "number",
+      "aggregation": "sum",
+      "description": "Lifetime order count."
+    },
+    {
+      "name": "total_revenue",
+      "column": "total_revenue",
+      "type": "number",
+      "aggregation": "sum",
+      "description": "Lifetime revenue."
+    },
+    {
+      "name": "average_order_value",
+      "column": "average_order_value",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Average order value."
+    },
+    {
+      "name": "lifetime_value",
+      "column": "lifetime_value",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Total historical customer revenue.",
+      "definitionId": "lifetime_value"
+    },
+    {
+      "name": "days_since_last_purchase",
+      "column": "days_since_last_purchase",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Recency in days.",
+      "definitionId": "recent_purchase"
+    },
+    {
+      "name": "churn_score",
+      "column": "churn_score",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Normalized churn risk between 0 and 1.",
+      "definitionId": "churn_risk"
+    },
+    {
+      "name": "purchase_propensity_score",
+      "column": "purchase_propensity_score",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Likelihood of a purchase in the next 30 days."
+    },
+    {
+      "name": "product_fit_score",
+      "column": "product_fit_score",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Fit between customer affinity and current catalog."
+    },
+    {
+      "name": "campaign_engagement_score",
+      "column": "campaign_engagement_score",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Normalized campaign engagement 0-1.",
+      "definitionId": "engaged_customer"
+    },
+    {
+      "name": "email_open_rate",
+      "column": "email_open_rate",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Trailing email open rate."
+    },
+    {
+      "name": "email_click_rate",
+      "column": "email_click_rate",
+      "type": "number",
+      "aggregation": "avg",
+      "description": "Trailing email click rate."
+    }
+  ],
+  "definitions": [
+    {
+      "id": "lifetime_value",
+      "name": "Lifetime Value",
+      "definition": "Total historical customer revenue across all completed orders.",
+      "threshold": { "high_value": 1000 }
+    },
+    {
+      "id": "active_customer",
+      "name": "Active Customer",
+      "definition": "Customer with purchase activity during the approved 90-day activity window and status of active or at_risk."
+    },
+    {
+      "id": "churn_risk",
+      "name": "Churn Risk",
+      "definition": "Normalized model score between 0 and 1 estimating probability of churn in the next 60 days. High risk is greater than 0.70."
+    },
+    {
+      "id": "engaged_customer",
+      "name": "Engaged Customer",
+      "definition": "Customer meeting campaign engagement criteria: campaign_engagement_score >= 0.40 or a campaign interaction in the last 30 days."
+    },
+    {
+      "id": "recent_purchase",
+      "name": "Recent Purchase",
+      "definition": "A purchase occurring within the configurable recency window of 90 days (days_since_last_purchase <= 90)."
+    },
+    {
+      "id": "high_value_churn_risk",
+      "name": "High Value Churn Risk",
+      "definition": "lifetime_value > 1000 AND churn_score > 0.70 AND days_since_last_purchase <= 90 AND campaign_engagement_score < 0.25."
+    }
+  ]
+}

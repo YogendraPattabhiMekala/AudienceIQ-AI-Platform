@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app_db
+      DEMO_MODE: "true"
+      WAREHOUSE_ADAPTER: postgres
+      BACKEND_PORT: "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Product UI (Next.js) is the primary demo surface. Run it on the host
+  # with `npm run dev` or `npm run start` after `npx drizzle-kit push`.
+  # A frontend image is optional; reviewers typically use the host Next.js
+  # server against this Compose Postgres.
+
+  temporal:
+    profiles: ["temporal"]
+    image: temporalio/auto-setup:1.27.2
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgres12
+      - POSTGRES_SEEDS=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
