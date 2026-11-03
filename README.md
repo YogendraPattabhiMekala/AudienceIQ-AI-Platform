@@ -7,6 +7,36 @@ AudienceIQ is a full-stack data product for exploring first-party customer data,
 The system demonstrates how analytical warehouse data can be transformed into a responsive product experience without issuing expensive warehouse queries for every interactive request.
 
 > **Notice:** All customer records in this repository are synthetically generated for demonstration. Names, emails (`@example.com`), purchase histories, and model scores are synthetic and contain no real personally identifiable information (PII).
+## Application Preview
+
+AudienceIQ is a full-stack customer intelligence platform featuring interactive analytics, dynamic segmentation, governed natural-language queries, and data synchronization monitoring.
+
+### Executive Dashboard
+![AudienceIQ Dashboard](docs/images/dashboard.png)
+
+*Customer intelligence KPIs, churn-risk distribution, revenue analytics, and dataset freshness.*
+
+### Customer Explorer
+![Customer Explorer](docs/images/customers.png)
+
+*Search, filter, and explore 3,200 synthetic customer profiles.*
+
+### Dynamic Audience Segmentation
+![Dynamic Segments](docs/images/segments.png)
+
+*Manage rule-based audience segments and customer memberships.*
+
+### Ask AudienceIQ — Natural-Language Analytics
+![Ask AudienceIQ](docs/images/ask-audienceiq.png)
+
+*Ask business questions in natural language and explore governed analytics results.*
+
+### Data Operations
+![Data Operations](docs/images/operations.png)
+
+*Monitor synchronization workflows, pipeline status, and dataset freshness.*
+
+> All customer data is synthetic. Marketing activations are simulated. The application currently runs locally; public deployment is planned for a future iteration.
 
 ---
 
