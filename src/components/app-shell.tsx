@@ -52,7 +52,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="grain relative hidden w-[248px] shrink-0 flex-col bg-[#10161f] text-[#e8e4d9] md:flex">
         <div className="flex items-center gap-3 px-5 pb-6 pt-6">
           <Image
-            src="/brand/audienceiq-mark.png"
+            src="/brand/audienceiq-mark.svg"
             alt="AudienceIQ"
             width={36}
             height={36}
